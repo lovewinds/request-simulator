@@ -1,0 +1,52 @@
+Configutation:
+  name: Default
+  properties: 
+    property: 
+    - name: appname
+      value: Spring-Boot-Gradle-Boilerplate
+    - name: filename
+      value: logs/app.log
+
+  Appenders: 
+
+    Console: 
+      name: Console
+      target: SYSTEM_OUT
+      PatternLayout: 
+        pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} %c{1.} %X{requestId} - %msg%n"
+
+    RollingFile: 
+      name: RollingFile
+      fileName: ${filename}
+      filePattern: "${filename}.%d{yyyy-MM-dd-hh-mm}.gz"
+      PatternLayout: 
+        pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} %c{1.} %X{requestId} - %msg%n"
+      Policies: 
+        SizeBasedTriggeringPolicy: 
+          size: 10 MB
+      DefaultRolloverStrategy: 
+        max: 5
+
+  Loggers: 
+
+      Root: 
+        level: info
+        AppenderRef: 
+          - ref: Console
+            level: error
+          - ref: RollingFile
+
+      Logger: 
+        - name: com.example.app
+          additivity: false
+          level: info
+          AppenderRef: 
+            - ref: Console
+              level: error
+            - ref: RollingFile
+
+        - name: org.zalando.logbook
+          additivity: false
+          level: info
+          AppenderRef: 
+            - ref: RollingFile

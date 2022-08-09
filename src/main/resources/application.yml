@@ -1,0 +1,67 @@
+# Base configuration
+
+server: 
+  port: 8080
+  servlet:
+    context-path: /api/example
+
+logbook: 
+  include: 
+    - /api/example/**
+  exclude: 
+    - /api/example/actuator/**
+  write: 
+    level: INFO
+  filter.enabled: true
+  secure-filter.enabled: true
+  format.style: http
+  strategy: body-only-if-status-at-least
+  minimum-status: 400
+  obfuscate:
+    headers:
+      - Authorization
+      - X-Secret
+      - token
+    parameters:
+      - access_token
+      - password
+      - email
+    write:
+      chunk-size: 1000
+
+# Middleware configuration
+middleware: 
+
+  requestId: 
+    header: 
+      name: X-Request-Id
+
+---
+
+# Default configuration
+
+spring:
+
+  profiles: default
+
+# Logging
+logging: 
+  config: classpath:log4j2/log4j2.yml
+
+---
+
+# Production configuration
+
+spring:
+
+  profiles: production
+
+  main:
+    banner-mode: off
+
+# Logging
+logging: 
+  config: classpath:log4j2/log4j2-production.yml
+
+logbook: 
+  format.style: json
